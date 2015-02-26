@@ -22,8 +22,14 @@ public class OtsuBinarize {
     public static BufferedImage binarizeImage(BufferedImage bimg) {
     	 
         grayscale = toGray(bimg);
-        //binarized = binarize(grayscale);      
-        return grayscale;
+        binarized = binarize(grayscale);      
+        return binarized;
+        
+    }
+    
+    public static BufferedImage greyscaleImage(BufferedImage bimg) {
+   	    
+		return toGray(bimg);
         
     }
  

@@ -74,6 +74,6 @@ public class MatchFinder {
     }
  
     public static void main(String [] args) {
-    	getClosetItem("2ad c@nn0n","move");
+    	System.out.println((double)1 / 24);
     }
 }

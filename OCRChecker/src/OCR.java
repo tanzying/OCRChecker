@@ -33,20 +33,19 @@ public static void main(String[] args) throws IOException {
 	        BufferedImage bimg = ImageIO.read(imageFile);
 	        
 	        // Get the dimensions of the image file
-	        int width = bimg.getWidth();
-	        int height = bimg.getHeight();
+	        double width = bimg.getWidth();
+	        double height = bimg.getHeight();
 	        
 	        // Draw rectangles to demarcate the area of the image in which the moves are displayed
 	        // Images will vary in size so only relative positions should be used, not absolute ones!
-	        Rectangle speciesrect = new Rectangle((int) (width * 0.36), (int) (height * 2 / 12), (int) (width * 0.22), (int) (height / 12));
-	        Rectangle levelrect = new Rectangle((int) (width * 0.405), (int) (height * 1 / 24), (int) (width * 0.145), (int) (height / 12));
-	        Rectangle HPrect = new Rectangle((int) (width * 0.20), (int) (height * 3 / 12), (int) (width * 0.2), (int) (height / 12));
-	        Rectangle atkrect = new Rectangle((int) (width * 0.266), (int) (height * 4 / 12), (int) (width * 0.095), (int) (height / 12));
-	        Rectangle defrect = new Rectangle((int) (width * 0.266), (int) (height * 5 / 12), (int) (width * 0.095), (int) (height / 12));
-	        Rectangle satkrect = new Rectangle((int) (width * 0.266), (int) (height * 6 / 12), (int) (width * 0.095), (int) (height / 12));
-	        Rectangle sdefrect = new Rectangle((int) (width * 0.266), (int) (height * 7 / 12), (int) (width * 0.095), (int) (height / 12));
-	        Rectangle sperect = new Rectangle((int) (width * 0.266), (int) (height * 8 / 12), (int) (width * 0.095), (int) (height / 12));
-	        Rectangle allmovesrect = new Rectangle((int) (width * 0.59), (int) (height * 8 / 12), (int) (width * 0.35), height - (int) (height * 2 / 3));
+	        Rectangle speciesrect = new Rectangle((int) (width * 0.36), (int) (height * 2.1 / 12), (int) (width * 0.22), (int) (height * 0.9 / 12));
+	        Rectangle levelrect = new Rectangle((int) (width * 0.455), (int) (height * 1.1 / 24), (int) (width * 0.1), (int) (height * 0.9 / 12));
+	        Rectangle HPrect = new Rectangle((int) (width * 0.20), (int) (height * 3.1 / 12), (int) (width * 0.2), (int) (height * 0.9 / 12));
+	        Rectangle atkrect = new Rectangle((int) (width * 0.276), (int) (height * 4.1 / 12), (int) (width * 0.08), (int) (height * 0.9 / 12));
+	        Rectangle defrect = new Rectangle((int) (width * 0.276), (int) (height * 5.1 / 12), (int) (width * 0.08), (int) (height * 0.9 / 12));
+	        Rectangle satkrect = new Rectangle((int) (width * 0.276), (int) (height * 6.1 / 12), (int) (width * 0.08), (int) (height * 0.9 / 12));
+	        Rectangle sdefrect = new Rectangle((int) (width * 0.276), (int) (height * 7.1 / 12), (int) (width * 0.08), (int) (height * 0.9 / 12));
+	        Rectangle sperect = new Rectangle((int) (width * 0.276), (int) (height * 8.1 / 12), (int) (width * 0.08), (int) (height * 0.9 / 12));	        
 	        Rectangle move1rect = new Rectangle((int) (width * 0.59), (int) (height * 8 / 12), (int) (width * 0.35), (int) (height / 12));
 	        Rectangle move2rect = new Rectangle((int) (width * 0.59), (int) (height * 9 / 12), (int) (width * 0.35), (int) (height / 12));
 	        Rectangle move3rect = new Rectangle((int) (width * 0.59), (int) (height * 10 / 12), (int) (width * 0.35), (int) (height / 12));
@@ -54,6 +53,7 @@ public static void main(String[] args) throws IOException {
 	        Rectangle naturerect = new Rectangle((int) (width * 0.21), (int) (height * 9 / 12), (int) (width * 0.31), (int) (height / 12));
 	        Rectangle abilityrect = new Rectangle((int) (width * 0.21), (int) (height * 10 / 12), (int) (width * 0.31), (int) (height / 12));
 	        Rectangle itemrect = new Rectangle((int) (width * 0.21), (int) (height * 11 / 12), (int) (width * 0.31), (int) (height / 12));
+	
 	        
 	        bimg = OtsuBinarize.greyscaleImage(bimg);
 	        //bimg = OtsuBinarize.binarizeImage(bimg);        
@@ -74,9 +74,9 @@ public static void main(String[] args) throws IOException {
 	            String item = instance.doOCR(bimg, itemrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
 	            
 	            // Restrict OCR to only numerical digits and "Lv." for the following attributes
-	        	instance.setTessVariable("tessedit_char_whitelist", "0123456789Lv.");
+	        	instance.setTessVariable("tessedit_char_whitelist", "0123456789.");
 	            
-	        	String level = instance.doOCR(bimg, levelrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
+	        	String level = instance.doOCR(bimg, levelrect).replaceAll("\\.|\\n|\\t|\\s(?=\\s)|^\\s", "");
 	        	
 		         // Restrict OCR to only numerical digits and / for the following attributes
 		        instance.setTessVariable("tessedit_char_whitelist", "0123456789/");
@@ -92,16 +92,15 @@ public static void main(String[] args) throws IOException {
 	        	String sdef = instance.doOCR(bimg, sdefrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
 	        	String spe = instance.doOCR(bimg, sperect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
 	        	
-	        	
-	            
-	        	species = Levenshtein.getClosetItem(species, "species");
-	        	nature = Levenshtein.getClosetItem(nature, "nature");
-	        	ability = Levenshtein.getClosetItem(ability, "ability");
-	        	item = Levenshtein.getClosetItem(item, "item");
-	            move1 = Levenshtein.getClosetItem(move1, "move");
-	            move2 = Levenshtein.getClosetItem(move2, "move");
-	            move3 = Levenshtein.getClosetItem(move3, "move");
-	            move4 = Levenshtein.getClosetItem(move4, "move");
+	            // Find the nearest matches in the list of names for these attributes
+	        	species = MatchFinder.getClosetItem(species, "species");
+	        	nature = MatchFinder.getClosetItem(nature, "nature");
+	        	ability = MatchFinder.getClosetItem(ability, "ability");
+	        	item = MatchFinder.getClosetItem(item, "item");
+	            move1 = MatchFinder.getClosetItem(move1, "move");
+	            move2 = MatchFinder.getClosetItem(move2, "move");
+	            move3 = MatchFinder.getClosetItem(move3, "move");
+	            move4 = MatchFinder.getClosetItem(move4, "move");
 	            
 	            // Return attributes
 	            System.out.println(species + "\t" + 

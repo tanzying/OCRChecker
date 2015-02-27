@@ -40,7 +40,7 @@ public static void main(String[] args) throws IOException {
 	        // Images will vary in size so only relative positions should be used, not absolute ones!
 	        Rectangle speciesrect = new Rectangle((int) (width * 0.36), (int) (height * 2.1 / 12), (int) (width * 0.22), (int) (height * 0.9 / 12));
 	        Rectangle levelrect = new Rectangle((int) (width * 0.455), (int) (height * 1.1 / 24), (int) (width * 0.1), (int) (height * 0.9 / 12));
-	        Rectangle HPrect = new Rectangle((int) (width * 0.20), (int) (height * 3.1 / 12), (int) (width * 0.2), (int) (height * 0.9 / 12));
+	        Rectangle HPrect = new Rectangle((int) (width * 0.32), (int) (height * 3.1 / 12), (int) (width * 0.08), (int) (height * 0.9 / 12));
 	        Rectangle atkrect = new Rectangle((int) (width * 0.276), (int) (height * 4.1 / 12), (int) (width * 0.08), (int) (height * 0.9 / 12));
 	        Rectangle defrect = new Rectangle((int) (width * 0.276), (int) (height * 5.1 / 12), (int) (width * 0.08), (int) (height * 0.9 / 12));
 	        Rectangle satkrect = new Rectangle((int) (width * 0.276), (int) (height * 6.1 / 12), (int) (width * 0.08), (int) (height * 0.9 / 12));
@@ -120,7 +120,7 @@ public static void main(String[] args) throws IOException {
 	            					item);
 
 	        } catch (TesseractException e) {
-	            System.err.println(e.getMessage());
+	            //System.err.println(e.getMessage());
 	        }   	
 		    
 	        // Debug code to check whether rectangles are drawn in the correct locations	        

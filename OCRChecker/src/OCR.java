@@ -76,21 +76,21 @@ public static void main(String[] args) throws IOException {
 	            // Restrict OCR to only numerical digits and "Lv." for the following attributes
 	        	instance.setTessVariable("tessedit_char_whitelist", "0123456789.");
 	            
-	        	String level = instance.doOCR(bimg, levelrect).replaceAll("\\.|\\n|\\t|\\s(?=\\s)|^\\s", "");
+	        	String levelstr = instance.doOCR(bimg, levelrect).replaceAll("\\.|\\n|\\t|\\s(?=\\s)|^\\s", "");
 	        	
 		         // Restrict OCR to only numerical digits and / for the following attributes
 		        instance.setTessVariable("tessedit_char_whitelist", "0123456789/");
 		        	
-	        	String HP = instance.doOCR(bimg, HPrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
+	        	String HPstr = instance.doOCR(bimg, HPrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
 	        	
 	        	// Restrict OCR to only numerical digits for the following attributes
 	        	instance.setTessVariable("tessedit_char_whitelist", "0123456789");
 	        	
-	        	String atk = instance.doOCR(bimg, atkrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
-	        	String def = instance.doOCR(bimg, defrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
-	        	String satk = instance.doOCR(bimg, satkrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
-	        	String sdef = instance.doOCR(bimg, sdefrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
-	        	String spe = instance.doOCR(bimg, sperect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
+	        	String atkstr = instance.doOCR(bimg, atkrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
+	        	String defstr = instance.doOCR(bimg, defrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
+	        	String satkstr = instance.doOCR(bimg, satkrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
+	        	String sdefstr = instance.doOCR(bimg, sdefrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
+	        	String spestr = instance.doOCR(bimg, sperect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
 	        	
 	            // Find the nearest matches in the list of names for these attributes
 	        	species = MatchFinder.getClosetItem(species, "species");
@@ -102,15 +102,20 @@ public static void main(String[] args) throws IOException {
 	            move3 = MatchFinder.getClosetItem(move3, "move");
 	            move4 = MatchFinder.getClosetItem(move4, "move");
 	            
+	            int[] statarr = {Integer.parseInt(HPstr),Integer.parseInt(atkstr),Integer.parseInt(defstr),
+	            				 Integer.parseInt(satkstr),Integer.parseInt(sdefstr),Integer.parseInt(spestr)};
+	            int level = Integer.parseInt(levelstr);
+	            int[] minEVsarr = CalcStats.calculatePokemonsMinEVs(species, nature, level, statarr);
+	            
 	            // Return attributes
 	            System.out.println(species + "\t" + 
 	            					level + "\t" + 
-	            					HP + "\t" + 
-	            					atk + "\t" + 
-	            					def + "\t" + 
-	            					satk + "\t" + 
-	            					sdef + "\t" + 
-	            					spe + "\t" + 
+	            					HPstr + "\t" + 
+	            					atkstr + "\t" + 
+	            					defstr + "\t" + 
+	            					satkstr + "\t" + 
+	            					sdefstr + "\t" + 
+	            					spestr + "\t" + 
 	            					move1 + "\t" + 
 	            					move2 + "\t" + 
 	            					move3 + "\t" + 
@@ -123,7 +128,7 @@ public static void main(String[] args) throws IOException {
 	            //System.err.println(e.getMessage());
 	        }   	
 		    
-	        // Debug code to check whether rectangles are drawn in the correct locations	        
+	        /*/ Debug code to check whether rectangles are drawn in the correct locations	        
 	        Graphics2D graph = bimg.createGraphics();
 	        graph.setColor(Color.BLUE);
 	        graph.draw(speciesrect);

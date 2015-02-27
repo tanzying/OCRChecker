@@ -4,11 +4,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.json.simple.*;
-import org.json.simple.parser.*;
+import static java.nio.file.Paths.get;
+import static java.nio.file.Files.readAllBytes;
+
+import org.json.*;
 
 
-public class CalcStats {
+public class StatCalc {
+	
+	public JSONObject pokedex;
+	
+	public StatCalc() throws JSONException, IOException{
+		pokedex = new JSONObject(new String(readAllBytes(get("src\\data\\pokedex.js"))));
+	}
 	
 	public static int calculateStat(int base, int ivs, int evs, int level, double nature, boolean ishp){
 		if (ishp){
@@ -62,25 +70,21 @@ public class CalcStats {
 		}
 	}
 	
-    public static void main(String [] args) {
+	public int[] calculatePokemonsMinEVs(String species, String nature, int level, int[] statarr){
+		
+		int[] minEVsarr = new int[6];
+		for (int stat : statarr){
+			
 
-    	JSONParser parser = new JSONParser();
-    	try {
-    		
-    		Object obj = parser.parse(new FileReader("data\\pokedex.js"));
-    		JSONObject jsonobj = (JSONObject) obj;
-    		
-    		String a = (String) jsonobj.get("bulbasaur");
-    		System.out.println(a);
-    		
-    	
-	    } catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
-			e.printStackTrace();
 		}
+		return minEVsarr;
+	}
+	
+    public static void main(String [] args) throws IOException, JSONException {
+
+    	JSONObject obj = new JSONObject(new String(readAllBytes(get("src\\data\\pokedex.js"))));
+    	String a = obj.getJSONObject("bulbasaur").getJSONArray("types").getString(1);
+    	System.out.println(a);
     }
 
 }

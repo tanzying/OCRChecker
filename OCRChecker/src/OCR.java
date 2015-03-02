@@ -10,13 +10,48 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-public class OCR {
+import org.json.JSONException;
 
-public static void main(String[] args) throws IOException {
+public class OCR {
 	
-	String filepath = new String("C:\\Users\\Tan Zong Ying\\Desktop\\OCRChecker\\CC_raw\\");
-    String filepathbinarized = new String("C:\\Users\\Tan Zong Ying\\Desktop\\OCRChecker\\binarized\\");
-    String filepathgreyscale = new String("C:\\Users\\Tan Zong Ying\\Desktop\\OCRChecker\\greyscale\\");
+public static String arrToTabbedString(Object[] objarr){
+	String outstring = new String();
+	for (Object obj : objarr){
+		outstring += obj.toString() + "\t";
+	}
+	return outstring;
+}
+
+public static Integer[] toObject(int[] intArray) {
+	 
+	Integer[] result = new Integer[intArray.length];
+	for (int i = 0; i < intArray.length; i++) {
+		result[i] = Integer.valueOf(intArray[i]);
+	}
+	return result;
+}
+
+public static int sumOfIntArr(int[] intArray){
+	int outint = 0;
+	for (int i : intArray){
+		outint += i;
+	}
+	return outint;
+}
+
+public static void main(String[] args) throws IOException, JSONException {
+	
+    /*StatCalc calcer = new StatCalc();
+    
+    int[] minEVsarr = calcer.calculatePokemonsMinEVs("Kyogre", "Naughty", 82, new int[]{307,223,214,297,242,180});
+    for(int number: minEVsarr){
+    	   System.out.println(number);
+    	 }*/
+	
+	String filepath = new String("data\\CC_raw\\");
+	//String filepath = new String("C:\\Users\\Tan Zong Ying\\Desktop\\OCRChecker\\CC_raw\\");
+    //String filepathbinarized = new String("C:\\Users\\Tan Zong Ying\\Desktop\\OCRChecker\\binarized\\");
+    //String filepathgreyscale = new String("C:\\Users\\Tan Zong Ying\\Desktop\\OCRChecker\\greyscale\\");
 	//String filename = new String("Image 026");
 	//String fileext = new String(".png");
 	
@@ -63,63 +98,77 @@ public static void main(String[] args) throws IOException {
 	        	// Restrict OCR to only alphabet characters, -, ' and 2 (for Porygon2 lol) for the following attributes
 	        	instance.setTessVariable("tessedit_char_whitelist", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-'2");
 	        	
-	        	// Run OCR on moves
+	        	// Run OCR on the string 
 	        	String species = instance.doOCR(bimg, speciesrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
-	            String move1 = instance.doOCR(bimg, move1rect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
-	            String move2 = instance.doOCR(bimg, move2rect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
-	            String move3 = instance.doOCR(bimg, move3rect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
-	            String move4 = instance.doOCR(bimg, move4rect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
 	            String nature = instance.doOCR(bimg, naturerect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
 	            String ability = instance.doOCR(bimg, abilityrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
 	            String item = instance.doOCR(bimg, itemrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
+	            
+	        	String[] movesarr = new String[4];
+	        	movesarr[0] = instance.doOCR(bimg, move1rect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
+	        	movesarr[1] = instance.doOCR(bimg, move2rect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
+	        	movesarr[2] = instance.doOCR(bimg, move3rect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
+	        	movesarr[3] = instance.doOCR(bimg, move4rect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
 	            
 	            // Restrict OCR to only numerical digits and "Lv." for the following attributes
 	        	instance.setTessVariable("tessedit_char_whitelist", "0123456789.");
 	            
 	        	String levelstr = instance.doOCR(bimg, levelrect).replaceAll("\\.|\\n|\\t|\\s(?=\\s)|^\\s", "");
 	        	
+	        	String[] statstrarr = new String[6];
+	        	
 		         // Restrict OCR to only numerical digits and / for the following attributes
 		        instance.setTessVariable("tessedit_char_whitelist", "0123456789/");
 		        	
-	        	String HPstr = instance.doOCR(bimg, HPrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
+		        statstrarr[0] = instance.doOCR(bimg, HPrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
 	        	
 	        	// Restrict OCR to only numerical digits for the following attributes
 	        	instance.setTessVariable("tessedit_char_whitelist", "0123456789");
 	        	
-	        	String atkstr = instance.doOCR(bimg, atkrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
-	        	String defstr = instance.doOCR(bimg, defrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
-	        	String satkstr = instance.doOCR(bimg, satkrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
-	        	String sdefstr = instance.doOCR(bimg, sdefrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
-	        	String spestr = instance.doOCR(bimg, sperect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
+	        	statstrarr[1] = instance.doOCR(bimg, atkrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
+	        	statstrarr[2] = instance.doOCR(bimg, defrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
+	        	statstrarr[3] = instance.doOCR(bimg, satkrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
+	        	statstrarr[4] = instance.doOCR(bimg, sdefrect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
+	        	statstrarr[5] = instance.doOCR(bimg, sperect).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
 	        	
 	            // Find the nearest matches in the list of names for these attributes
 	        	species = MatchFinder.getClosetItem(species, "species");
 	        	nature = MatchFinder.getClosetItem(nature, "nature");
 	        	ability = MatchFinder.getClosetItem(ability, "ability");
-	        	item = MatchFinder.getClosetItem(item, "item");
-	            move1 = MatchFinder.getClosetItem(move1, "move");
-	            move2 = MatchFinder.getClosetItem(move2, "move");
-	            move3 = MatchFinder.getClosetItem(move3, "move");
-	            move4 = MatchFinder.getClosetItem(move4, "move");
+	        	item = MatchFinder.getClosetItem(item, "item");      	
+	        	for (int i = 0; i < movesarr.length; i++){
+	        		movesarr[i] = MatchFinder.getClosetItem(movesarr[i], "move");
+	        	}
+	        	
+	        	// Convert the number based items to ints, assign values of -1 to denote an error if the OCR failed
+	            int[] statarr = new int[6];
+	            for (int i = 0; i <= 5; i++){
+		            try {
+			            statarr[i] = Integer.parseInt(statstrarr[i]);
+		            } catch (NumberFormatException e){
+		            	statarr[i] = -1;
+		            }
+	            }
 	            
-	            int[] statarr = {Integer.parseInt(HPstr),Integer.parseInt(atkstr),Integer.parseInt(defstr),
-	            				 Integer.parseInt(satkstr),Integer.parseInt(sdefstr),Integer.parseInt(spestr)};
-	            int level = Integer.parseInt(levelstr);
-	            int[] minEVsarr = CalcStats.calculatePokemonsMinEVs(species, nature, level, statarr);
+	            int level = 0;
+	            try {
+		            level = Integer.parseInt(levelstr);
+	            } catch (NumberFormatException e){
+	            	level = -1;
+	            }
+
+	            // Calculate minimum EVs using the given information	            	            
+	            StatCalc calcer = new StatCalc();
+	            
+	            int[] minEVsarr = calcer.calculatePokemonsMinEVs(species, nature, level, statarr);
 	            
 	            // Return attributes
 	            System.out.println(species + "\t" + 
 	            					level + "\t" + 
-	            					HPstr + "\t" + 
-	            					atkstr + "\t" + 
-	            					defstr + "\t" + 
-	            					satkstr + "\t" + 
-	            					sdefstr + "\t" + 
-	            					spestr + "\t" + 
-	            					move1 + "\t" + 
-	            					move2 + "\t" + 
-	            					move3 + "\t" + 
-	            					move4 + "\t" + 
+	            					arrToTabbedString(statstrarr) +
+	            					arrToTabbedString(toObject(minEVsarr)) +
+	            					sumOfIntArr(minEVsarr) + "\t" + 
+	            					arrToTabbedString(movesarr) +
 	            					nature + "\t" + 
 	            					ability + "\t" + 
 	            					item);
@@ -127,8 +176,10 @@ public static void main(String[] args) throws IOException {
 	        } catch (TesseractException e) {
 	            //System.err.println(e.getMessage());
 	        }   	
-		    
-	        /*/ Debug code to check whether rectangles are drawn in the correct locations	        
+	        
+		    /*
+		    // MOVE THIS INTO ITS OWN METHOD SOON
+	        // Debug code to check whether rectangles are drawn in the correct locations	        
 	        Graphics2D graph = bimg.createGraphics();
 	        graph.setColor(Color.BLUE);
 	        graph.draw(speciesrect);
@@ -153,7 +204,9 @@ public static void main(String[] args) throws IOException {
 	        
 	        // Output greyscale/binarized images
 	        ImageIO.write(bimg, "png", new File(filepathgreyscale + imageFile.getName()));
-	        //ImageIO.write(bimg, "png", new File(filepathbinarized + filename + fileext));*/
+	        //ImageIO.write(bimg, "png", new File(filepathbinarized + filename + fileext));
+	        
+	        */
 	   
 		}	    
 	}

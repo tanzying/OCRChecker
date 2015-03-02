@@ -1,8 +1,4 @@
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import static java.nio.file.Paths.get;
 import static java.nio.file.Files.readAllBytes;
@@ -13,9 +9,11 @@ import org.json.*;
 public class StatCalc {
 	
 	public JSONObject pokedex;
+	public JSONObject natures;
 	
 	public StatCalc() throws JSONException, IOException{
 		pokedex = new JSONObject(new String(readAllBytes(get("src\\data\\pokedex.js"))));
+		natures = new JSONObject(new String(readAllBytes(get("src\\data\\natures.js"))));
 	}
 	
 	public static int calculateStat(int base, int ivs, int evs, int level, double nature, boolean ishp){
@@ -70,20 +68,32 @@ public class StatCalc {
 		}
 	}
 	
-	public int[] calculatePokemonsMinEVs(String species, String nature, int level, int[] statarr){
+	public int[] calculatePokemonsMinEVs(String species, String nature, int level, int[] statarr) throws JSONException{
+		
+		int[] basestatarr = {	pokedex.getJSONObject(species).getJSONObject("baseStats").getInt("hp"),
+								pokedex.getJSONObject(species).getJSONObject("baseStats").getInt("atk"),
+								pokedex.getJSONObject(species).getJSONObject("baseStats").getInt("def"),
+								pokedex.getJSONObject(species).getJSONObject("baseStats").getInt("spa"),
+								pokedex.getJSONObject(species).getJSONObject("baseStats").getInt("spd"),
+								pokedex.getJSONObject(species).getJSONObject("baseStats").getInt("spe")};
+		
+		JSONArray naturearr = natures.getJSONArray(nature);
 		
 		int[] minEVsarr = new int[6];
-		for (int stat : statarr){
-			
-
+		
+		minEVsarr[0] = findLowestEVs(statarr[0], basestatarr[0], level, 1, true);
+				
+		for (int statindex = 1; statindex <= 5; statindex++){			
+			minEVsarr[statindex] = findLowestEVs(statarr[statindex], basestatarr[statindex], level, naturearr.getDouble(statindex-1), false);
 		}
+		
 		return minEVsarr;
 	}
 	
     public static void main(String [] args) throws IOException, JSONException {
 
     	JSONObject obj = new JSONObject(new String(readAllBytes(get("src\\data\\pokedex.js"))));
-    	String a = obj.getJSONObject("bulbasaur").getJSONArray("types").getString(1);
+    	int a = obj.getJSONObject("bulbasaur").getJSONObject("baseStats").getInt("hp");
     	System.out.println(a);
     }
 

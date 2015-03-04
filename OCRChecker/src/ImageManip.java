@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
  
-public class OtsuBinarize {
+public class ImageManip {
  
     private static BufferedImage original, grayscale, binarized;
  
@@ -31,6 +31,27 @@ public class OtsuBinarize {
    	    
 		return toGray(bimg);
         
+    }
+    
+    public static BufferedImage stitchImages(BufferedImage[] bimgarr, int cols){
+    	
+    	int piecewidth = bimgarr[0].getWidth();
+    	int rows = (int) Math.ceil((double) bimgarr.length / cols);
+    	int pieceheight = bimgarr[0].getHeight();
+    	int type = bimgarr[0].getType();
+    	
+    	BufferedImage finalImg = new BufferedImage(piecewidth*cols, pieceheight*rows, type);
+    	
+        int n = 0;  
+        for (int i = 0; i < rows; i++) {  
+            for (int j = 0; j < cols; j++) {  
+                finalImg.createGraphics().drawImage(bimgarr[n], piecewidth * j, pieceheight * i, null);  
+                n++;  
+            }  
+        } 
+        
+        return finalImg;
+    	
     }
  
     private static void writeImage(String output) throws IOException {

@@ -16,7 +16,7 @@ import org.json.JSONException;
 public class OCRtourney {
 	
 
-public static void main(String[] args) throws IOException, JSONException {
+public static void main(String[] args) throws IOException, TesseractException {
 	
     String KP = new String();
 	
@@ -44,8 +44,9 @@ public static void main(String[] args) throws IOException, JSONException {
    
 	        BufferedImage bimg = ImageIO.read(imagefilearr[i]);
 	        bimgarr[i] = bimg;
-	        String info = OCR.extractInfo(bimg, instance);
-	        System.out.println(OCR.arrToTabbedString(nameID) + info);
+	        Pokemon pokemon = OCR.extractInfo(bimg, instance);
+	        System.out.println(nameID[0] + "\t" + nameID[1] + "\t" + pokemon.printAttributesToString());
+	        KP += pokemon.getSpecies() + "\t";
 	           	           	        
 		}	   
     	} // For loop for screenshot file ends

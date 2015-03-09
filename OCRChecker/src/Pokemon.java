@@ -12,6 +12,7 @@ public class Pokemon {
 	private int[] actualstats = new int[6];
 	private int[] minEVs = new int[6];
 	private String[] moves = new String[4];
+	public int KP;
 	
 	// Constructs a Pokemon object from an array of strings with the following indices/elements:
 	// 0: species, 1: level, 2: HP, 3: Atk, 4: Def, 5: SAtk, 6: SDef, 7: Spe

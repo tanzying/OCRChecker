@@ -1,7 +1,9 @@
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
  
 public class ImageManip {
@@ -33,14 +35,14 @@ public class ImageManip {
         
     }
     
-    public static BufferedImage stitchImages(BufferedImage[] bimgarr, int cols){
+    public static BufferedImage stitchImages(BufferedImage[] bimgarr, int cols, String filename){
     	
     	int piecewidth = bimgarr[0].getWidth();
     	int rows = (int) Math.ceil((double) bimgarr.length / cols);
     	int pieceheight = bimgarr[0].getHeight();
     	int type = bimgarr[0].getType();
     	
-    	BufferedImage finalImg = new BufferedImage(piecewidth*cols, pieceheight*rows, type);
+    	BufferedImage finalImg = new BufferedImage(piecewidth*cols, (int)(pieceheight*rows*1.05), type);
     	
         int n = 0;  
         for (int i = 0; i < rows; i++) {  
@@ -49,6 +51,12 @@ public class ImageManip {
                 n++;  
             }  
         } 
+        
+        Graphics2D g = finalImg.createGraphics();
+        g.setPaintMode();
+        g.setFont(g.getFont().deriveFont(80f));
+        g.drawString(filename, 100, (int)(pieceheight*rows*1.04));
+        g.dispose();
         
         return finalImg;
     	

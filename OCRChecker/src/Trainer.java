@@ -47,5 +47,9 @@ public class Trainer {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public ArrayList<Pokemon> getPokemonArr(){
+		return pokemonarr;
+	}
 
 }

@@ -35,6 +35,34 @@ public class Pokemon {
             actualstats[i] = statFromStringToInt(inputdata[i + 2]);
         }
         
+     // Disambiguate formes - currently only genies and Rotoms are supported
+        if (species == "Landorus" || species == "Thundurus" || species == "Tornadus"){
+        	if (ability == "Intimidate" || ability == "Volt Absorb" || ability == "Regenerator"){
+            	species += "-therian";
+            } else {
+            	species += "-incarnate";
+            }
+        } else if (species == "Rotom"){
+        	loop: for (int i = 0; i <=3; i++){
+        		switch (moves[i]){
+        			case "Hydro Pump":
+        				species += "-wash";
+        				break loop;
+        			case "Overheat":
+        				species += "-heat";
+        				break loop;
+        			case "Blizzard":
+        				species += "-frost";
+        				break loop;
+        			case "Air Slash":
+        				species += "-fan";
+        				break loop;
+        			case "Leaf Storm":
+        				species += "-mow";
+        				break loop;
+        		}
+        	}
+        }
      // Calculate minimum EVs using the given level and stats. Assume maximum IVs
         try {
         	StatCalc calcer = new StatCalc();

@@ -26,9 +26,13 @@ public class Tournament {
 	
 	public ArrayList<Participant> participantsarr;
 	public Map<String,Integer> KPMap;
+	public String name;
+	public String date;
 	
-	public Tournament(){
+	public Tournament(String name, String date){
 		participantsarr = new ArrayList<Participant>();
+		this.name = name;
+		this.date = date;
 	}
 	
 	public void importParticipantsFromScreenshots(String inputdirectory, String outfilepath) throws IOException, TesseractException{	
@@ -144,19 +148,40 @@ public class Tournament {
 		}
 		return outstring;
 	}
-
+// ---------------------------------------------------------------------------------------------------------------------------------------
+	public ArrayList<Participant> getParticipantsarr() {return participantsarr;}
+	public String getName() {return name;}
+	public String getDate() {return date;}
+// ---------------------------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------------------------
+	
 	public static void main(String[] args) throws IOException, TesseractException {
 		
 		String filepath = new String("data\\tournament\\");
 		String outfilepath = new String("data\\teams\\");
+		String name = "Sceptile series PC 2";
+		String date = "27-09-15";
 		
-		Tournament tourney = new Tournament();
+		Tournament tourney = new Tournament(name, date);
 		
 		tourney.importParticipantsFromScreenshots(filepath,outfilepath);
 		
-		tourney.calculateKP();
-		printMap(tourney.KPMap);		
+		//tourney.calculateKP();
+		//printMap(tourney.KPMap);	
+		
+		WriteXML write = new WriteXML();
+		write.writeTournament(tourney);
 		
 	}
+
 	
 }

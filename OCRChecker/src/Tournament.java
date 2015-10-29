@@ -193,7 +193,7 @@ public class Tournament {
 		tourney.importParticipantsFromScreenshots(filepath,teamimagespath);
 		
 		tourney.calculateKP();
-		//printMap(tourney.KPMap);	
+		printMap(tourney.KPMap);	
 		//testing1
 		WriteXML write = new WriteXML();
 		write.writeTournament(tourney, xmlpath);

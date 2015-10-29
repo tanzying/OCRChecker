@@ -1,5 +1,10 @@
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -148,10 +153,19 @@ public class Tournament {
 		}
 		return outstring;
 	}
+	
+	public void printParticipantsToFile(String outfilepath) throws IOException {
+		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outfilepath + this.name + " players.txt"),"utf8"));
+		for (Participant p : participantsarr){
+			writer.write(p.getName() + "\n");
+		}
+		writer.close();
+	}
 // ---------------------------------------------------------------------------------------------------------------------------------------
 	public ArrayList<Participant> getParticipantsarr() {return participantsarr;}
 	public String getName() {return name;}
 	public String getDate() {return date;}
+	public Map<String,Integer> getKPMap() {return KPMap;}
 // ---------------------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------------
@@ -166,21 +180,24 @@ public class Tournament {
 	
 	public static void main(String[] args) throws IOException, TesseractException {
 		
-		String filepath = new String("data\\tournament\\");
-		String outfilepath = new String("data\\teams\\");
-		String name = "Sceptile series PC 2";
+		String filepath = new String("data\\Sceptile PC 1 teams\\");
+		String teamimagespath = new String("data\\teams\\");
+		String xmlpath = new String("data\\");
+		String playerspath = new String("data\\");
+		
+		String name = "Sceptile series PC 1";
 		String date = "27-09-15";
 		
 		Tournament tourney = new Tournament(name, date);
 		
-		tourney.importParticipantsFromScreenshots(filepath,outfilepath);
+		tourney.importParticipantsFromScreenshots(filepath,teamimagespath);
 		
-		//tourney.calculateKP();
+		tourney.calculateKP();
 		//printMap(tourney.KPMap);	
 		
 		WriteXML write = new WriteXML();
-		write.writeTournament(tourney);
-		
+		write.writeTournament(tourney, xmlpath);
+		tourney.printParticipantsToFile(playerspath);
 	}
 
 	

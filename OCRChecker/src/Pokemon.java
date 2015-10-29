@@ -35,7 +35,7 @@ public class Pokemon {
             actualstats[i] = statFromStringToInt(inputdata[i + 2]);
         }
         
-     // Disambiguate formes - currently only genies and Rotoms are supported
+     // Disambiguate formes - currently only genies, Rotoms and Meowstics are supported
         if (species == "Landorus" || species == "Thundurus" || species == "Tornadus"){
         	if (ability == "Intimidate" || ability == "Volt Absorb" || ability == "Regenerator"){
             	species += "-therian";
@@ -62,6 +62,12 @@ public class Pokemon {
         				break loop;
         		}
         	}
+        } else if (species == "Meowstic"){
+        	if (ability == "Competitive"){
+            	species += "-female";
+            } else {
+            	species += "-male";
+            }
         }
      // Calculate minimum EVs using the given level and stats. Assume maximum IVs
         try {

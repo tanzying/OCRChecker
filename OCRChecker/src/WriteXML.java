@@ -1,4 +1,5 @@
 import java.io.File;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,7 +20,7 @@ public class WriteXML {
 	public WriteXML() {
 	}
 	
-	public void writeTournament(Tournament tournament){
+	public void writeTournament(Tournament tournament, String outfile){
 		
 		try {
 			
@@ -84,13 +85,28 @@ public class WriteXML {
 				}
 			}
 			
+			// UsageStatistics node
+			Element usagestatistics = doc.createElement("UsageStatistics");
+			tourney.appendChild(usagestatistics);
+			
+			Map <String,Integer> tourneyKPmap = tournament.getKPMap();
+			
+			for (String pokemonname : tourneyKPmap.keySet()){
+				
+				Element pokemon = doc.createElement("pokemon");
+				pokemon.setAttribute("species", pokemonname);
+				pokemon.setAttribute("usagecount", tourneyKPmap.get(pokemonname).toString());
+				usagestatistics.appendChild(pokemon);
+				
+			}
+			
 			// write the content into xml file
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File( "data\\" + tournament.getName() + ".xml"));
+			StreamResult result = new StreamResult(new File(outfile + tournament.getName() + ".xml"));
 
 			// Output to console for testing
 			// StreamResult result = new StreamResult(System.out);

@@ -194,7 +194,7 @@ public class Tournament {
 		
 		tourney.calculateKP();
 		//printMap(tourney.KPMap);	
-		
+		//testing1
 		WriteXML write = new WriteXML();
 		write.writeTournament(tourney, xmlpath);
 		tourney.printParticipantsToFile(playerspath);

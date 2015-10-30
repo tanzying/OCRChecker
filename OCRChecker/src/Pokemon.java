@@ -8,6 +8,8 @@ public class Pokemon {
 	private String nature;
 	private String ability;
 	private String helditem;
+	private String type1;
+	private String type2;
 	private int level;
 	private int[] actualstats = new int[6];
 	private int[] minEVs = new int[6];
@@ -16,13 +18,17 @@ public class Pokemon {
 	
 	// Constructs a Pokemon object from an array of strings with the following indices/elements:
 	// 0: species, 1: level, 2: HP, 3: Atk, 4: Def, 5: SAtk, 6: SDef, 7: Spe
-	// 8: nature, 9: ability, 10: held item, 11-14: moves 1-4
+	// 8: nature, 9: ability, 10: held item, 11-14: moves 1-4, 15: type 1, 16: type 2
 	public Pokemon(String[] inputdata) throws IOException{
 		
     	species = MatchFinder.getClosetItem(inputdata[0], "species");
     	nature = MatchFinder.getClosetItem(inputdata[8], "nature");
     	ability = MatchFinder.getClosetItem(inputdata[9], "ability");
     	helditem = MatchFinder.getClosetItem(inputdata[10], "item");
+    	//type1 = MatchFinder.getClosetItem(inputdata[15], "type");
+    	type1 = inputdata[15];
+    	//type2 = MatchFinder.getClosetItem(inputdata[16], "type");
+    	type2 = inputdata[16];
     	// Moves
     	for (int i = 0; i <=3; i++){
     		moves[i] = MatchFinder.getClosetItem(inputdata[i + 11], "move");
@@ -43,25 +49,23 @@ public class Pokemon {
             	species += "-incarnate";
             }
         } else if (species == "Rotom"){
-        	loop: for (int i = 0; i <=3; i++){
-        		switch (moves[i]){
-        			case "Hydro Pump":
-        				species += "-wash";
-        				break loop;
-        			case "Overheat":
-        				species += "-heat";
-        				break loop;
-        			case "Blizzard":
-        				species += "-frost";
-        				break loop;
-        			case "Air Slash":
-        				species += "-fan";
-        				break loop;
-        			case "Leaf Storm":
-        				species += "-mow";
-        				break loop;
-        		}
-        	}
+    		switch (type2){
+    			case "Water":
+    				species += "-wash";
+    				break;
+    			case "Fire":
+    				species += "-heat";
+    				break;
+    			case "Ice":
+    				species += "-frost";
+    				break;
+    			case "Flying":
+    				species += "-fan";
+    				break;
+    			case "Grass":
+    				species += "-mow";
+    				break;
+    		}
         } else if (species == "Meowstic"){
         	if (ability == "Competitive"){
             	species += "-female";
@@ -105,7 +109,9 @@ public class Pokemon {
 					arrToTabbedString(moves) +
 					nature + "\t" + 
 					ability + "\t" + 
-					helditem;
+					helditem + "\t" + 
+					type1 + "\t" + 
+					type2;
 	}
 	
 	private static String arrToTabbedString(Object[] objarr){

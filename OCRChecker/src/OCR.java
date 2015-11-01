@@ -103,8 +103,8 @@ public class OCR {
 	    rectarr[15] = new Rectangle((int) (width * 0.60), (int) (height * 5.6 / 12), (int) (width * 0.12), (int) (height * 0.8 / 12));
 	    rectarr[16] = new Rectangle((int) (width * 0.73), (int) (height * 5.6 / 12), (int) (width * 0.12), (int) (height * 0.8 / 12));
 	    
-	    String type1 = getType(bimg,rectarr[15]);
-	    String type2 = getType(bimg,rectarr[16]);
+	    //String type1 = getType(bimg,rectarr[15]);
+	    //String type2 = getType(bimg,rectarr[16]);
 	    
 	    bimg = ImageManip.greyscaleImage(bimg);
 	    //bimg = ImageManip.binarizeImage(bimg);
@@ -129,8 +129,8 @@ public class OCR {
 	    		attribsarr[i] = instance.doOCR(bimg, rectarr[i]).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
 	    		if (i==1) attribsarr[i] = attribsarr[i].replaceAll("\\.", "");
 	    	}
-	    	attribsarr[15] = type1;
-	    	attribsarr[16] = type2;
+	    	//attribsarr[15] = type1;
+	    	//attribsarr[16] = type2;
 	    	
 	    	//drawRects(bimg, rectarr,  outputfile);
 	    	return new Pokemon(attribsarr);       

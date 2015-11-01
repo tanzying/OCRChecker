@@ -180,13 +180,13 @@ public class Tournament {
 	
 	public static void main(String[] args) throws IOException, TesseractException {
 		
-		String filepath = new String("data\\Sceptile PC 2 teams\\");
-		String teamimagespath = new String("data\\teams\\");
+		String filepath = new String("data\\Sceptile PC 3 teams\\");
+		String teamimagespath = new String("data\\team images\\");
 		String xmlpath = new String("data\\");
 		String playerspath = new String("data\\");
 		
-		String name = "Sceptile series PC 2";
-		String date = "27-09-15";
+		String name = "Sceptile series PC 3";
+		String date = "17-10-15";
 		
 		Tournament tourney = new Tournament(name, date);
 		

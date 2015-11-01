@@ -25,10 +25,9 @@ public class Pokemon {
     	nature = MatchFinder.getClosetItem(inputdata[8], "nature");
     	ability = MatchFinder.getClosetItem(inputdata[9], "ability");
     	helditem = MatchFinder.getClosetItem(inputdata[10], "item");
-    	//type1 = MatchFinder.getClosetItem(inputdata[15], "type");
-    	type1 = inputdata[15];
-    	//type2 = MatchFinder.getClosetItem(inputdata[16], "type");
-    	type2 = inputdata[16];
+    	//type1 = inputdata[15];
+    	//type2 = inputdata[16];
+    	
     	// Moves
     	for (int i = 0; i <=3; i++){
     		moves[i] = MatchFinder.getClosetItem(inputdata[i + 11], "move");
@@ -49,22 +48,24 @@ public class Pokemon {
             	species += "-incarnate";
             }
         } else if (species == "Rotom"){
-    		switch (type2){
-    			case "Water":
-    				species += "-wash";
-    				break;
-    			case "Fire":
-    				species += "-heat";
-    				break;
-    			case "Ice":
-    				species += "-frost";
-    				break;
-    			case "Flying":
-    				species += "-fan";
-    				break;
-    			case "Grass":
-    				species += "-mow";
-    				break;
+        	loop: for (int i = 0; i <= 3; i++){
+	    		switch (moves[i]){
+	    			case "Hydro Pump":
+	    				species += "-wash";
+	    				break loop;
+	    			case "Overheat":
+	    				species += "-heat";
+	    				break loop;
+	    			case "Blizzard":
+	    				species += "-frost";
+	    				break loop;
+	    			case "Air Slash":
+	    				species += "-fan";
+	    				break loop;
+	    			case "Leaf Storm":
+	    				species += "-mow";
+	    				break loop;
+	    		}	    		
     		}
         } else if (species == "Meowstic"){
         	if (ability == "Competitive"){
@@ -109,9 +110,10 @@ public class Pokemon {
 					arrToTabbedString(moves) +
 					nature + "\t" + 
 					ability + "\t" + 
-					helditem + "\t" + 
+					helditem/* + "\t" + 
 					type1 + "\t" + 
-					type2;
+					type2*/
+					;
 	}
 	
 	private static String arrToTabbedString(Object[] objarr){

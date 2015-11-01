@@ -81,7 +81,7 @@ public class Tournament {
 		} // For loop for subdir ends
 		 
 		System.out.println(printParticipantDetailsToString());
-		System.out.println(printAllTeamsToString());
+		//System.out.println(printAllTeamsToString());
 	}
 	
 	public void calculateKP(){
@@ -180,12 +180,12 @@ public class Tournament {
 	
 	public static void main(String[] args) throws IOException, TesseractException {
 		
-		String filepath = new String("data\\Sceptile PC 1 teams\\");
+		String filepath = new String("data\\Sceptile PC 2 teams\\");
 		String teamimagespath = new String("data\\teams\\");
 		String xmlpath = new String("data\\");
 		String playerspath = new String("data\\");
 		
-		String name = "Sceptile series PC 1";
+		String name = "Sceptile series PC 2";
 		String date = "27-09-15";
 		
 		Tournament tourney = new Tournament(name, date);

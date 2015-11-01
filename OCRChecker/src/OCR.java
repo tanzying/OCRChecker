@@ -1,5 +1,6 @@
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.io.IOException;
 import java.util.Random;
 
@@ -33,8 +34,45 @@ public class OCR {
 	    graph.dispose();
 	    ImageIO.write(bimg, "png", new File(filename));
 	}
+	
+    public static String getType(BufferedImage bimg, Rectangle rect) {
+    	
+    	int rgb, red, green, blue;
+        HashMap<Integer, Integer> pixelcolormap = new HashMap<Integer, Integer>();
+        int highestcount = 0;
+        int highestcolor = 0;
+        
+        
+        for (int i = 0; i < rect.width; i++) {
+            for (int j = 0; j < rect.height; j++) {
+
+            	rgb = bimg.getRGB(i + rect.x, j + rect.y); 
+
+                if ( pixelcolormap.containsKey(rgb) ){
+                	pixelcolormap.put(rgb, pixelcolormap.get(rgb) + 1);
+                } else {
+                	pixelcolormap.put(rgb, 1);
+                }
+                
+                if ( pixelcolormap.get(rgb) > highestcount){ 
+                	highestcolor = rgb;
+                	highestcount = pixelcolormap.get(rgb);
+                }
+ 
+            }
+        }
+        
+        	red = new Color(highestcolor).getRed();
+            green = new Color(highestcolor).getGreen();
+            blue = new Color(highestcolor).getBlue();
+
+            return MatchFinder.getClosestType(red, green, blue);
+
+        
+    }
 
 	public static Pokemon extractInfo(BufferedImage bimg, Tesseract instance) throws TesseractException, IOException{
+	//public static Pokemon extractInfo(BufferedImage bimg, Tesseract instance, String outputfile) throws TesseractException, IOException{ // Debug
 		
 		 // Get the dimensions of the image file
 	    double width = bimg.getWidth();
@@ -44,7 +82,7 @@ public class OCR {
 	    // Images will vary in size so only relative positions should be used, not absolute ones!
 	    // 0: species, 1: level, 2: HP, 3: Atk, 4: Def, 5: SAtk, 6: SDef, 7: Spe, 8: nature, 9: ability, 10: held item
 	    // 11-14: moves 1-4 
-	    Rectangle[] rectarr = new Rectangle[15];
+	    Rectangle[] rectarr = new Rectangle[17];
 	    //rectarr[0] = new Rectangle((int) (width * 0.36), (int) (height * 2.1 / 12), (int) (width * 0.22), (int) (height * 0.9 / 12)); //XY
         //rectarr[1] = new Rectangle((int) (width * 0.455), (int) (height * 1.1 / 24), (int) (width * 0.1), (int) (height * 0.9 / 12)); //XY
 	    rectarr[0] = new Rectangle((int) (width * 0.31), (int) (height * 1.1 / 12), (int) (width * 0.22), (int) (height * 0.9 / 12)); //ORAS
@@ -62,16 +100,21 @@ public class OCR {
 	    rectarr[12] = new Rectangle((int) (width * 0.59), (int) (height * 9 / 12), (int) (width * 0.35), (int) (height / 12));
 	    rectarr[13] = new Rectangle((int) (width * 0.59), (int) (height * 10 / 12), (int) (width * 0.35), (int) (height / 12));
 	    rectarr[14] = new Rectangle((int) (width * 0.59), (int) (height * 11 / 12), (int) (width * 0.35), (int) (height / 12));
+	    rectarr[15] = new Rectangle((int) (width * 0.60), (int) (height * 5.6 / 12), (int) (width * 0.12), (int) (height * 0.8 / 12));
+	    rectarr[16] = new Rectangle((int) (width * 0.73), (int) (height * 5.6 / 12), (int) (width * 0.12), (int) (height * 0.8 / 12));
+	    
+	    String type1 = getType(bimg,rectarr[15]);
+	    String type2 = getType(bimg,rectarr[16]);
 	    
 	    bimg = ImageManip.greyscaleImage(bimg);
 	    //bimg = ImageManip.binarizeImage(bimg);
 	    	    	
-	    	String[] attribsarr = new String[15];
+	    	String[] attribsarr = new String[17];
 	    	for (int i = 0; i <=14; i++){
 	    		switch (i){
-		    		// 0: species, 8: nature, 9: ability, 10: held item, 11-14: moves 1-4
+		    		// 0: species, 8: nature, 9: ability, 10: held item, 11-14: moves 1-4, 15: type 1, 16: type 2
 	    			// All strings, so restrict OCR to recognise only letters and allowed punctuation (and 2 for Porygon2)
-		    		case 0: case 8: case 9: case 10: case 11: case 12: case 13: case 14: 
+		    		case 0: case 8: case 9: case 10: case 11: case 12: case 13: case 14:
 		    			instance.setTessVariable("tessedit_char_whitelist", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-'2");
 		    			break;
 		    		// 1: level, 2: HP, 3: Atk, 4: Def, 5: SAtk, 6: SDef, 7: Spe
@@ -86,6 +129,10 @@ public class OCR {
 	    		attribsarr[i] = instance.doOCR(bimg, rectarr[i]).replaceAll("\\n|\\t|\\s(?=\\s)|^\\s", "");
 	    		if (i==1) attribsarr[i] = attribsarr[i].replaceAll("\\.", "");
 	    	}
+	    	attribsarr[15] = type1;
+	    	attribsarr[16] = type2;
+	    	
+	    	//drawRects(bimg, rectarr,  outputfile);
 	    	return new Pokemon(attribsarr);       
 		
 	}
@@ -99,7 +146,8 @@ public static void main(String[] args) throws TesseractException, IOException {
     	   System.out.println(number);
     	 }*/
 	
-	String filepath = new String("data\\CC_raw\\");
+	String filepath = new String("data\\CC_raw_ORAS\\");
+	String outputfilepath = new String("data\\test output\\");
 
 	Tesseract instance = Tesseract.getInstance();
 	
@@ -112,6 +160,7 @@ public static void main(String[] args) throws TesseractException, IOException {
 	    	//File imageFile = new File(filepath + filename + fileext);	        
 	        BufferedImage bimg = ImageIO.read(imageFile);
 	        Pokemon pokemon = OCR.extractInfo(bimg, instance);
+//	        Pokemon pokemon = OCR.extractInfo(bimg, instance, outputfilepath + imageFile.getName());
 	        pokemon.printAttributes();
 	          
 	}	    
